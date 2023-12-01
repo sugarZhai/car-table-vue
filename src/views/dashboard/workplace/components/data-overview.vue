@@ -9,11 +9,14 @@
             show-group-separator
             :value-from="0"
             animation
+            :style="{ fontSize: '10px' }"
           >
             <template #prefix>
               <span
                 class="statistic-prefix"
-                :style="{ background: item.prefix.background }"
+                :style="{
+                  background: item.prefix.background,
+                }"
               >
                 <component
                   :is="item.prefix.icon"
@@ -309,6 +312,9 @@
       display: flex;
       align-items: center;
     }
+    .arco-statistic-content .arco-statistic-value-integer {
+      font-size: 14px;
+    }
   }
   .statistic-prefix {
     display: inline-block;
@@ -316,7 +322,7 @@
     height: 25px;
     margin-right: 8px;
     color: var(--color-white);
-    font-size: 11px;
+    font-size: 10px;
     line-height: 25px;
     text-align: center;
     vertical-align: middle;
