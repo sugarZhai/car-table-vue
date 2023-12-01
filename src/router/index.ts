@@ -13,12 +13,12 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: 'workplace',
+      redirect: '/dashboard/workplace',
     },
     {
-      path: '/workplace',
-      name: 'workplace',
-      component: () => import('@/views/dashboard/workplace/index.vue'),
+      path: '/login',
+      name: 'login',
+      component: () => import('@/views/login/index.vue'),
       meta: {
         requiresAuth: false,
       },

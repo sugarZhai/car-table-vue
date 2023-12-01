@@ -123,14 +123,15 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref } from 'vue';
+  import { computed, ref, inject } from 'vue';
   import { Message } from '@arco-design/web-vue';
-  import { useFullscreen } from '@vueuse/core';
+  import { useDark, useToggle, useFullscreen } from '@vueuse/core';
   import { useAppStore, useUserStore } from '@/store';
   import { LOCALE_OPTIONS } from '@/locale';
   import useLocale from '@/hooks/locale';
   import useUser from '@/hooks/user';
   import Menu from '@/components/menu/index.vue';
+  import MessageBox from '../message-box/index.vue';
   import LogoBanner from '../../assets/images/logo.png';
 
   const appStore = useAppStore();
@@ -140,14 +141,43 @@
   const { isFullscreen, toggle: toggleFullScreen } = useFullscreen();
   const locales = [...LOCALE_OPTIONS];
   const avatar = computed(() => {
-    return userStore.avatar;
+    return (
+      'https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp' ||
+      userStore.avatar
+    );
+  });
+  const theme = computed(() => {
+    return appStore.theme;
   });
   const topMenu = computed(() => appStore.topMenu && appStore.menu);
+  const isDark = useDark({
+    selector: 'body',
+    attribute: 'arco-theme',
+    valueDark: 'dark',
+    valueLight: 'light',
+    storageKey: 'arco-theme',
+    onChanged(dark: boolean) {
+      // overridden default behavior
+      appStore.toggleTheme(dark);
+    },
+  });
+  const toggleTheme = useToggle(isDark);
+  const handleToggleTheme = () => {
+    toggleTheme();
+  };
   const setVisible = () => {
     appStore.updateSettings({ globalSettings: true });
   };
+  const refBtn = ref();
   const triggerBtn = ref();
-
+  const setPopoverVisible = () => {
+    const event = new MouseEvent('click', {
+      view: window,
+      bubbles: true,
+      cancelable: true,
+    });
+    refBtn.value.dispatchEvent(event);
+  };
   const handleLogout = () => {
     logout();
   };
@@ -163,6 +193,7 @@
     const res = await userStore.switchRoles();
     Message.success(res as string);
   };
+  const toggleDrawerMenu = inject('toggleDrawerMenu') as () => void;
 </script>
 
 <style scoped lang="less">

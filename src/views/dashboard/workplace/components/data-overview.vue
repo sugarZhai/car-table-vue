@@ -1,7 +1,7 @@
 <template>
   <a-spin :loading="loading" style="width: 100%">
     <a-card class="general-card" :title="$t('KPI总览')">
-      <a-row justify="space-between">
+      <a-row justify="space-between" style="width: 90%">
         <a-col v-for="(item, idx) in renderData" :key="idx" :span="2">
           <a-statistic
             :title="item.title"
@@ -9,14 +9,11 @@
             show-group-separator
             :value-from="0"
             animation
-            :style="{ fontSize: '10px' }"
           >
             <template #prefix>
               <span
                 class="statistic-prefix"
-                :style="{
-                  background: item.prefix.background,
-                }"
+                :style="{ background: item.prefix.background }"
               >
                 <component
                   :is="item.prefix.icon"
@@ -312,7 +309,7 @@
       display: flex;
       align-items: center;
     }
-    .arco-statistic-content .arco-statistic-value-integer {
+    .arco-statistic-value-integer {
       font-size: 14px;
     }
   }
@@ -320,9 +317,9 @@
     display: inline-block;
     width: 25px;
     height: 25px;
-    margin-right: 8px;
+    margin-right: 4px;
     color: var(--color-white);
-    font-size: 10px;
+    font-size: 11px;
     line-height: 25px;
     text-align: center;
     vertical-align: middle;

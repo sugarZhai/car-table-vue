@@ -16,10 +16,10 @@ setupMock({
       if (isLogin()) {
         const role = window.localStorage.getItem('userRole') || 'admin';
         return successResponseWrap({
-          name: '翟爽爽',
+          name: 'zhaishuang',
           avatar:
-            'https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp',
-          email: 'zhaishuang0813n@email.com',
+            '//lf1-xgcdn-tos.pstatp.com/obj/vcloud/vadmin/start.8e0e4855ee346a46ccff8ff3e24db27b.png',
+          email: 'wangliqun@email.com',
           job: 'frontend',
           jobName: '前端艺术家',
           organization: 'Frontend',
