@@ -95,7 +95,7 @@
   const { isDark } = useThemes();
   const renderData = computed(() => [
     {
-      title: t('统计店数'),
+      title: '统计店数',
       value: 1902,
       prefix: {
         icon: 'icon-edit',
@@ -104,7 +104,7 @@
       },
     },
     {
-      title: t('好评率'),
+      title: '产值合计',
       value: 2445,
       prefix: {
         icon: 'icon-thumb-up',
@@ -113,7 +113,7 @@
       },
     },
     {
-      title: t('单品收藏'),
+      title: '总毛利',
       value: 1034,
       prefix: {
         icon: 'icon-heart',
@@ -122,7 +122,7 @@
       },
     },
     {
-      title: t('客户量'),
+      title: '新车销量',
       value: 1275,
       prefix: {
         icon: 'icon-user',

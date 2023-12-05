@@ -21,6 +21,11 @@ export default function useChartOption(sourceOption: optionsFn) {
   const chartOption = computed<EChartsOption>(() => {
     return sourceOption(isDark.value);
   });
+  // watchEffect(() => {
+  //   window.addEventListener('resize', () => {
+  //     orientation.value = getOrientation();
+  //   });
+  // });
   return {
     chartOption,
   };

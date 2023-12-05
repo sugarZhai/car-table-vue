@@ -3,7 +3,7 @@
     <div class="left-side">
       <a-space style="width: 160px">
         <img alt="logo" style="width: 28px" :src="LogoBanner" />
-        CAR GOODS KPI
+        汽车用品KPI
       </a-space>
     </div>
     <div class="center-side">

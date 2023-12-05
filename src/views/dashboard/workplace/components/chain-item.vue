@@ -11,7 +11,7 @@
           />
           <div class="desc">
             <a-typography-text type="secondary" class="label">
-              {{ $t('preMonth') }}
+              {{ '较上月' }}
             </a-typography-text>
             <a-typography-text type="danger">
               {{ renderData.growth }}
@@ -35,7 +35,6 @@
     const data = ref<any>([]);
     const { chartOption } = useChartOption(() => {
       return {
-        color: ['#165DFF'],
         grid: {
           left: 0,
           right: 0,
@@ -60,9 +59,6 @@
           barWidth: 5,
           itemStyle: {
             borderRadius: 2,
-            normal:{
-              color: '#165DFF',
-            }
           },
         },
       };
@@ -218,7 +214,7 @@
       };
       const data = {
         count: 5670,
-        growth: 206.32,
+        growth: 20.32,
         chartData: [...getLineData(year), ...getLineData(year - 1)],
       };
       renderData.value = data;
@@ -228,7 +224,7 @@
           barData.value.push({
             value: el.y,
             itemStyle: {
-              color: idx % 2 ? '#2CAB40' : '#86DF6C',
+              color: idx % 2 ? '#9370DB' : '#6A5ACD',
             },
           });
         });

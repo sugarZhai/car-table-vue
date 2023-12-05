@@ -1,37 +1,22 @@
 <template>
-  <div>
-    <Chart
-      class="option-line"
-      style="height: 220px; width: 100%; margin: auto"
-      :option="chartOption"
-  /></div>
+  <a-card :style="cardSty">
+    <div class="hor-ver"
+      ><div>出库占比</div>
+      <img
+        :src="HorizIcon"
+        style="width: 28px"
+        @click="updateChartContainerStyle"
+      />
+    </div>
+    <Chart :style="chartContainerStyle" :option="chartOption" />
+  </a-card>
 </template>
 
 <script lang="ts" setup>
+  import { ref, onMounted } from 'vue';
   import useChartOption from '@/hooks/chart-option';
-  import { ref } from 'vue';
-  import { ToolTipFormatterParams } from '@/types/echarts';
   import useLoading from '@/hooks/loading';
-
-  const tooltipItemsHtmlString = (items: any[]) => {
-    return items
-      .map(
-        (el) => `<div class="content-panel">
-    <p>
-      <span style="background-color: ${
-        el.color
-      }" class="tooltip-item-icon"></span>
-      <span>
-      ${el.seriesName}
-      </span>
-    </p>
-    <span class="tooltip-value">
-      ${Number(el.value).toLocaleString()}
-    </span>
-  </div>`
-      )
-      .join('');
-  };
+  import HorizIcon from '@/assets/images/horizon-icon.png';
 
   const { loading, setLoading } = useLoading(true);
   const xAxis = ref<string[]>([]);
@@ -90,18 +75,10 @@
       tooltip: {
         show: true,
         trigger: 'axis',
-        formatter(params) {
-          const [firstElement] = params as ToolTipFormatterParams[];
-          return `<div>
-            <p class="tooltip-title">${firstElement.axisValueLabel}</p>
-            ${tooltipItemsHtmlString(params as ToolTipFormatterParams[])}
-          </div>`;
-        },
-        className: 'echarts-tooltip-diy',
       },
       series: [
         {
-          name: 'Outbound Ratio',
+          name: '出库占比',
           data: textChartsData.value,
           stack: 'one',
           type: 'bar',
@@ -109,7 +86,7 @@
           color: isDark ? '#4A7FF7' : '#246EFF',
         },
         {
-          name: 'Outbound Ratio Target',
+          name: '出库占比目标',
           data: videoChartsData.value,
           stack: 'one',
           type: 'bar',
@@ -156,11 +133,48 @@
       setLoading(false);
     }
   };
-  fetchData();
+  const cardSty = ref({
+    marginBottom: '15px',
+    height: 'auto',
+    paddingTop: 0,
+  });
+  const chartContainerStyle = ref({
+    height: '220px',
+    width: '100%',
+    transform: 'rotate(0deg)',
+  });
+
+  const updateChartContainerStyle = () => {
+    chartContainerStyle.value = {
+      height: '230px',
+      width: '400px',
+      transform: 'rotate(90deg)', // Rotate 90 degrees
+    };
+    cardSty.value = {
+      height: '500px',
+      marginBottom: '15px',
+      paddingTop: '50px',
+    };
+  };
+  onMounted(() => {
+    fetchData();
+    // window.addEventListener('orientationchange', updateChartContainerStyle);
+    // window.addEventListener('resize', updateChartContainerStyle);
+  });
 </script>
 
 <style lang="less" scoped>
-  .option-line {
-    width: 80%;
+  .hor-ver {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bolder;
+    font-size: 16px;
+  }
+  /* Add the following media query for landscape mode styles */
+  @media screen and (orientation: landscape) {
+    .chart-container {
+      height: auto; /* or any other specific styles for landscape mode */
+    }
   }
 </style>

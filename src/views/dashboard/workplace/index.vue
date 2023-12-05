@@ -1,36 +1,15 @@
 <template>
   <div class="container">
     <dataView />
+    <LineItem />
     <a-card class="custom-crad">
-      <CategoriesPercent />
+      <a-card-meta title="品牌出库">
+        <template #description>
+          <CategoriesPercent />
+        </template>
+      </a-card-meta>
     </a-card>
-    <a-card class="custom-crad">
-      <LineItem />
-    </a-card>
-    <!-- 折线图 -->
-    <a-card class="custom-crad">
-      <a-row :gutter="10">
-        <a-col :span="12"
-          ><ChainItem
-            :title="$t('City')"
-            quota="visitors"
-            chart-type="line"
-            :card-style="{
-              background: 'linear-gradient(180deg, #f2f9fe 0%, #e6f4fe 100%)',
-            }"
-        /></a-col>
-        <a-col :span="12">
-          <ChainItem
-            :title="$t('Brand')"
-            quota="published"
-            chart-type="bar"
-            :card-style="{
-              background: 'linear-gradient(180deg, #F7F7FF 0%, #ECECFF 100%)',
-            }"
-          />
-        </a-col>
-      </a-row>
-    </a-card>
+    <CompareMonth />
     <PopularContent />
   </div>
 </template>
@@ -39,7 +18,7 @@
   import dataView from './components/data-overview.vue';
   import PopularContent from './components/popular-content.vue';
   import CategoriesPercent from './components/categories-percent.vue';
-  import ChainItem from './components/chain-item.vue';
+  import CompareMonth from './components/compare-month.vue';
   import LineItem from './components/line-item.vue';
 </script>
 
