@@ -2,11 +2,11 @@
   <a-card style="margin-bottom: 15px">
     <div class="hor-ver"
       ><div>品牌出库</div>
-      <img
+      <!-- <img
         :src="HorizIcon"
         style="width: 28px"
         @click="updateChartContainerStyle"
-      />
+      /> -->
     </div>
     <div :style="cardSty"
       ><Chart :style="chartContainerStyle" :option="chartOption"
@@ -18,7 +18,7 @@
   import { ref, onMounted } from 'vue';
   import useChartOption from '@/hooks/chart-option';
   import useLoading from '@/hooks/loading';
-  import HorizIcon from '@/assets/images/horizon-icon.png';
+  // import HorizIcon from '@/assets/images/horizon-icon.png';
 
   const { loading, setLoading } = useLoading(true);
   const xAxis = ref<string[]>([]);
@@ -143,30 +143,28 @@
     transform: 'rotate(0deg)',
   });
 
-  const updateChartContainerStyle = () => {
-    if (chartContainerStyle.value.height === '220px') {
-      chartContainerStyle.value = {
-        height: '230px',
-        transform: 'rotate(90deg)', // Rotate 90 degrees
-      };
-      cardSty.value = {
-        height: '481px',
-        paddingTop: '80px',
-      };
-    } else {
-      chartContainerStyle.value = {
-        height: '220px',
-        transform: 'rotate(0deg)',
-      };
-      cardSty.value = {
-        height: 'auto',
-      };
-    }
-  };
+  // const updateChartContainerStyle = () => {
+  //   if (chartContainerStyle.value.height === '220px') {
+  //     chartContainerStyle.value = {
+  //       height: '230px',
+  //       transform: 'rotate(90deg)', // Rotate 90 degrees
+  //     };
+  //     cardSty.value = {
+  //       height: '481px',
+  //       paddingTop: '80px',
+  //     };
+  //   } else {
+  //     chartContainerStyle.value = {
+  //       height: '220px',
+  //       transform: 'rotate(0deg)',
+  //     };
+  //     cardSty.value = {
+  //       height: 'auto',
+  //     };
+  //   }
+  // };
   onMounted(() => {
     fetchData();
-    // window.addEventListener('orientationchange', updateChartContainerStyle);
-    // window.addEventListener('resize', updateChartContainerStyle);
   });
 </script>
 
