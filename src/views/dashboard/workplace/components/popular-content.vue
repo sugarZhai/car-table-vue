@@ -186,23 +186,26 @@
     return undefined;
   };
 
-  const summary: any = ({ c, data }) => {
+  const summary: any = ({ c, data }: { c: any; data: any[] }) => {
     const countData: any = {
       outBoundRatio: 0,
       grossProfit: 0,
       carMonth: 0,
       outputValue: 0,
     };
+
     data.forEach((re: any) => {
       countData.outBoundRatio += re.outBoundRatio;
       countData.grossProfit += re.grossProfit;
       countData.carMonth += re.carMonth;
       countData.outputValue += re.outputValue;
     });
-    // let outBoundRatioString = countData.outBoundRatio
+
+    // Assuming countData.outBoundRatio is a string
     countData.outBoundRatio = `${parseFloat(countData.outBoundRatio).toFixed(
       2
     )}%`;
+
     return [
       {
         orgName: '合计',
