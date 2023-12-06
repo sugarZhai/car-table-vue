@@ -1,7 +1,7 @@
 <template>
   <a-card :style="cardSty">
     <div class="hor-ver"
-      ><div>出库占比</div>
+      ><div>品牌出库</div>
       <img
         :src="HorizIcon"
         style="width: 28px"

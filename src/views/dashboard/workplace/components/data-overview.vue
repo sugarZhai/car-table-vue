@@ -1,6 +1,6 @@
 <template>
   <a-spin :loading="loading" style="width: 100%">
-    <a-card class="general-card" :title="$t('KPI总览')">
+    <a-card class="general-card" :title="'KPI总览'">
       <a-row justify="space-between" style="width: 90%">
         <a-col v-for="(item, idx) in renderData" :key="idx" :span="2">
           <a-statistic

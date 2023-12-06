@@ -9,59 +9,58 @@
         {{ $t('workplace.popularContent') }}
       </template>
       <a-space direction="vertical" :size="10" fill>
-        <a-radio-group
-          v-model:model-value="type"
-          type="button"
-          @change="typeChange as any"
-        >
-          <a-radio value="text">
-            {{ $t('workplace.popularContent.text') }}
-          </a-radio>
-          <a-radio value="image">
-            {{ $t('workplace.popularContent.image') }}
-          </a-radio>
-          <a-radio value="video">
-            {{ $t('workplace.popularContent.video') }}
-          </a-radio>
-        </a-radio-group>
+        <a-form :model="form" @submit="handleSubmit">
+          <a-row>
+            <a-col :xs="24" :sm="12">
+              <a-form-item field="name" label="名称">
+                <a-input v-model="form.name" placeholder="请输入名称" />
+              </a-form-item>
+            </a-col>
+            <a-col :xs="24" :sm="12">
+              <a-form-item field="city" label="城市">
+                <a-select defaultValue="北京" placeholder="Please select ...">
+                  <a-option>北京</a-option>
+                  <a-option>上海</a-option>
+                  <a-option>大连</a-option>
+                  <a-option>杭州</a-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+          </a-row>
+          <a-row>
+            <a-col :xs="24" :sm="12">
+              <a-form-item field="month" label="月份">
+                <a-month-picker />
+              </a-form-item>
+            </a-col>
+            <a-col :xs="24" :sm="12">
+              <a-form-item>
+                <a-button
+                  html-type="submit"
+                  type="primary"
+                  style="margin-right: 20px"
+                  >查询</a-button
+                >
+                <a-button html-type="submit">重置</a-button>
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </a-form>
+      </a-space>
+      <a-space direction="vertical" :size="10" fill>
         <a-table
           :data="renderList"
+          row-key="key"
           :pagination="false"
           :bordered="false"
-          :scroll="{ x: '100%', y: '264px' }"
+          :scroll="{ x: 'max-content', y: '400px' }"
+          :summary="summary"
+          :columns="columns"
         >
-          <template #columns>
-            <!-- <a-table-column title="排名" data-index="key"></a-table-column> -->
-            <a-table-column title="品牌名称" data-index="title">
-              <template #cell="{ record }">
-                <a-typography-paragraph
-                  :ellipsis="{
-                    rows: 1,
-                  }"
-                >
-                  {{ record.title }}
-                </a-typography-paragraph>
-              </template>
-            </a-table-column>
-            <a-table-column title="outboundRatio" data-index="clickNumber">
-            </a-table-column>
-            <a-table-column
-              title="dayIncreaseRate"
-              data-index="increases"
-              :sortable="{
-                sortDirections: ['ascend', 'descend'],
-              }"
-            >
-              <template #cell="{ record }">
-                <div class="increases-cell">
-                  <span>{{ record.increases }}%</span>
-                  <icon-caret-up
-                    v-if="record.increases !== 0"
-                    style="color: #f53f3f; font-size: 8px"
-                  />
-                </div>
-              </template>
-            </a-table-column>
+          <template #summary-cell="{ column, record }">
+            <div :style="getColorStyle(column)">{{
+              record[column.dataIndex]
+            }}</div>
           </template>
         </a-table>
       </a-space>
@@ -70,125 +69,252 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { computed, ref, h, compile, reactive } from 'vue';
   import useLoading from '@/hooks/loading';
   // import { queryPopularList } from '@/api/dashboard';
-  import type { TableData } from '@arco-design/web-vue/es/table/interface';
 
-  const type = ref('text');
   const { loading, setLoading } = useLoading();
-  const renderList = ref<TableData[]>();
-  const fetchData = async (contentType: string) => {
+  const renderList = ref<any>();
+  const form = reactive({
+    month: '',
+    name: '',
+    city: '',
+  });
+  const handleSubmit = (data) => {
+    console.log(data);
+  };
+  const columns: any = computed(() => {
+    return [
+      {
+        title: '序号',
+        dataIndex: 'key',
+      },
+      {
+        title: '名称',
+        dataIndex: 'orgName',
+        // fixed: 'left',
+        width: 120,
+      },
+      {
+        title: '编码',
+        dataIndex: 'orgNum',
+        width: 100,
+        ellipsis: true,
+        tooltip: true,
+      },
+      {
+        title: '出库占比',
+        dataIndex: 'outBoundRatio',
+        width: 120,
+        sortable: {
+          sortDirections: ['ascend', 'descend'],
+        },
+        render({ record }: { record: any }) {
+          const { outBoundRatio } = record;
+          const shouldApplyStyles = outBoundRatio <= 1.5;
+          const styles = shouldApplyStyles
+            ? `color: ${
+                outBoundRatio > 1 ? '#ec9536' : '#e83642'
+              }; font-weight: bold;`
+            : '';
+
+          const tmp = `<span style="${styles}">${outBoundRatio}%</span>`;
+          return h(compile(tmp));
+        },
+      },
+      {
+        title: '基础商品占比',
+        width: 140,
+        dataIndex: 'basicCommodityRatio',
+        sortable: {
+          sortDirections: ['ascend', 'descend'],
+        },
+      },
+      {
+        title: '新车销量(台)',
+        width: 120,
+        dataIndex: 'carMonth',
+      },
+      {
+        title: '单车占比',
+        width: 90,
+        dataIndex: 'unitOutputRatio',
+      },
+      {
+        title: '产值(万元)',
+        width: 100,
+        dataIndex: 'outputValue',
+      },
+      {
+        title: '单车产值(万元)',
+        width: 140,
+        dataIndex: 'unitOutputValue',
+      },
+      {
+        title: '成本(万元)',
+        width: 100,
+        dataIndex: 'cost',
+      },
+      {
+        title: '毛利(万元)',
+        width: 100,
+        dataIndex: 'grossProfit',
+      },
+      {
+        title: '固定单产(元)',
+        width: 120,
+        dataIndex: 'determineUnitOutput',
+      },
+    ];
+  });
+  const getColorStyle: any = (column: { dataIndex: string }) => {
+    if (['grossProfit', 'carMonth', 'outputValue'].includes(column.dataIndex)) {
+      return { color: 'red', fontWeight: 'bolder' };
+    }
+    return undefined;
+  };
+
+  const summary: any = ({ c, data }) => {
+    const countData: any = {
+      grossProfit: 0,
+      carMonth: 0,
+      outputValue: 0,
+    };
+    data.forEach((re: any) => {
+      countData.grossProfit += re.grossProfit;
+      countData.carMonth += re.carMonth;
+      countData.outputValue += re.outputValue;
+    });
+    return [
+      {
+        orgName: '合计',
+        grossProfit: countData.grossProfit,
+        carMonth: countData.carMonth,
+        outputValue: countData.outputValue,
+      },
+    ];
+  };
+
+  const fetchData = async () => {
     try {
       setLoading(true);
       // const { data } = await queryPopularList({ type: contentType });
-      const textList = [
+      renderList.value = [
         {
           key: 1,
-          clickNumber: '346.3w+',
-          title: '经济日报：财政政策要精准提升…',
-          increases: 35,
+          id: 1,
+          basicCommodityRatio: '1.28',
+          carMonth: 20,
+          cost: '30',
+          grossProfit: 1,
+          grossProfitRatio: '1.2',
+          orgName: '沃尔沃',
+          orgNum: 'woerwo',
+          outBoundGoalAchievementRate: '0.2',
+          outBoundRatio: 2.71,
+          outBoundRatioGoal: '2.8',
+          outputValue: 7,
+          unitOutputRatio: '2',
+          unitOutputValue: '10',
+          determineUnitOutput: 12,
         },
         {
           key: 2,
-          clickNumber: '324.2w+',
-          title: '双12遇冷，消费者厌倦了电商平…',
-          increases: 22,
+          id: 2,
+          basicCommodityRatio: '1.28',
+          carMonth: 21,
+          cost: '30',
+          grossProfit: 2,
+          grossProfitRatio: '1.2',
+          orgName: '日产-英菲',
+          orgNum: 'yingfei',
+          outBoundGoalAchievementRate: '0.2',
+          outBoundRatio: 0.47,
+          outBoundRatioGoal: '2.8',
+          outputValue: 9,
+          unitOutputRatio: '2',
+          unitOutputValue: '10',
+          determineUnitOutput: 13,
         },
         {
           key: 3,
-          clickNumber: '318.9w+',
-          title: '致敬坚守战“疫”一线的社区工作…',
-          increases: 9,
+          id: 3,
+          basicCommodityRatio: '1.28',
+          carMonth: 22,
+          cost: '30',
+          grossProfit: 4,
+          grossProfitRatio: '1.2',
+          orgName: '江苏奔驰',
+          orgNum: 'jiangsubenchi',
+          outBoundGoalAchievementRate: '0.2',
+          outBoundRatio: 0.85,
+          outBoundRatioGoal: '2.8',
+          outputValue: 11,
+          unitOutputRatio: '2',
+          unitOutputValue: '10',
+          determineUnitOutput: 14,
         },
         {
           key: 4,
-          clickNumber: '257.9w+',
-          title: '普高还是职高？家长们陷入选择…',
-          increases: 17,
+          id: 4,
+          basicCommodityRatio: '1.28',
+          carMonth: 23,
+          cost: '30',
+          grossProfit: 3,
+          grossProfitRatio: '1.2',
+          orgName: '一汽奥迪',
+          orgNum: 'yiqiaodi',
+          outBoundGoalAchievementRate: '0.2',
+          outBoundRatio: 1.43,
+          outBoundRatioGoal: '2.8',
+          outputValue: 30,
+          unitOutputRatio: '2',
+          unitOutputValue: '10',
+          determineUnitOutput: 15,
         },
         {
           key: 5,
-          clickNumber: '124.2w+',
-          title: '人民快评：没想到“浓眉大眼”的…',
-          increases: 37,
+          id: 5,
+          basicCommodityRatio: '1.28',
+          carMonth: 24,
+          cost: '30',
+          grossProfit: 2,
+          grossProfitRatio: '1.2',
+          orgName: '雷克萨斯',
+          orgNum: 'leikesasi',
+          outBoundGoalAchievementRate: '0.2',
+          outBoundRatio: 0.61,
+          outBoundRatioGoal: '2.8',
+          outputValue: 22,
+          unitOutputRatio: '2',
+          unitOutputValue: '10',
+          determineUnitOutput: 16,
+        },
+        {
+          key: 6,
+          id: 6,
+          basicCommodityRatio: '1.28',
+          carMonth: 25,
+          cost: '30',
+          grossProfit: 2,
+          grossProfitRatio: '1.2',
+          orgName: '捷豹路虎',
+          orgNum: 'jiebaoluhu',
+          outBoundGoalAchievementRate: '0.2',
+          outBoundRatio: '2.73',
+          outBoundRatioGoal: '2.8',
+          outputValue: 21,
+          unitOutputRatio: '2',
+          unitOutputValue: '10',
         },
       ];
-      const imageList = [
-        {
-          key: 1,
-          clickNumber: '15.3w+',
-          title: '杨涛接替陆慷出任外交部美大司…',
-          increases: 15,
-        },
-        {
-          key: 2,
-          clickNumber: '12.2w+',
-          title: '图集：龙卷风袭击美国多州房屋…',
-          increases: 26,
-        },
-        {
-          key: 3,
-          clickNumber: '18.9w+',
-          title: '52岁大姐贴钱照顾自闭症儿童八…',
-          increases: 9,
-        },
-        {
-          key: 4,
-          clickNumber: '7.9w+',
-          title: '杭州一家三口公园宿营取暖中毒',
-          increases: 0,
-        },
-        {
-          key: 5,
-          clickNumber: '5.2w+',
-          title: '派出所副所长威胁市民？警方调…',
-          increases: 4,
-        },
-      ];
-      const videoList = [
-        {
-          key: 1,
-          clickNumber: '367.6w+',
-          title: '这是今日10点的南京',
-          increases: 5,
-        },
-        {
-          key: 2,
-          clickNumber: '352.2w+',
-          title: '立陶宛不断挑衅致经济受损民众…',
-          increases: 17,
-        },
-        {
-          key: 3,
-          clickNumber: '348.9w+',
-          title: '韩国艺人刘在石确诊新冠',
-          increases: 30,
-        },
-        {
-          key: 4,
-          clickNumber: '346.3w+',
-          title: '关于北京冬奥会，文在寅表态',
-          increases: 12,
-        },
-        {
-          key: 5,
-          clickNumber: '271.2w+',
-          title: '95后现役军人荣立一等功',
-          increases: 2,
-        },
-      ];
-     renderList.value = imageList
     } catch (err) {
       // you can report use errorHandler or other
     } finally {
       setLoading(false);
     }
   };
-  const typeChange = (contentType: string) => {
-    fetchData(contentType);
-  };
-  fetchData('text');
+  fetchData();
 </script>
 
 <style scoped lang="less">
