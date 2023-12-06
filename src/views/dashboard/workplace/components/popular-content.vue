@@ -30,7 +30,11 @@
           <a-row>
             <a-col :xs="24" :sm="12">
               <a-form-item field="month" label="月份">
-                <a-month-picker />
+                <a-month-picker
+                  :default-value="`${currentDate.getFullYear()}-${
+                    currentMonth < 10 ? '0' : ''
+                  }${currentMonth}`"
+                />
               </a-form-item>
             </a-col>
             <a-col :xs="24" :sm="12">
@@ -75,12 +79,16 @@
 
   const { loading, setLoading } = useLoading();
   const renderList = ref<any>();
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1; // Note: Months are zero-based
   const form = reactive({
-    month: '',
+    month: `${currentDate.getFullYear()}-${
+      currentMonth < 10 ? '0' : ''
+    }${currentMonth}`,
     name: '',
     city: '',
   });
-  const handleSubmit = (data) => {
+  const handleSubmit = (data: any) => {
     console.log(data);
   };
   const columns: any = computed(() => {
@@ -168,29 +176,37 @@
     ];
   });
   const getColorStyle: any = (column: { dataIndex: string }) => {
-    if (['grossProfit', 'carMonth', 'outputValue'].includes(column.dataIndex)) {
-      return { color: 'red', fontWeight: 'bolder' };
+    if (
+      ['outBoundRatio', 'grossProfit', 'carMonth', 'outputValue'].includes(
+        column.dataIndex
+      )
+    ) {
+      return { color: 'red', fontWeight: 'bolder', textAlign: 'center' };
     }
     return undefined;
   };
 
   const summary: any = ({ c, data }) => {
     const countData: any = {
+      outBoundRatio: 0,
       grossProfit: 0,
       carMonth: 0,
       outputValue: 0,
     };
     data.forEach((re: any) => {
+      countData.outBoundRatio += re.outBoundRatio;
       countData.grossProfit += re.grossProfit;
       countData.carMonth += re.carMonth;
       countData.outputValue += re.outputValue;
     });
+    // let outBoundRatioString = countData.outBoundRatio
+    countData.outBoundRatio = `${parseFloat(countData.outBoundRatio).toFixed(
+      2
+    )}%`;
     return [
       {
         orgName: '合计',
-        grossProfit: countData.grossProfit,
-        carMonth: countData.carMonth,
-        outputValue: countData.outputValue,
+        ...countData,
       },
     ];
   };

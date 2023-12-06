@@ -1,5 +1,5 @@
 <template>
-  <a-card :style="cardSty">
+  <a-card style="margin-bottom: 15px">
     <div class="hor-ver"
       ><div>品牌出库</div>
       <img
@@ -8,7 +8,9 @@
         @click="updateChartContainerStyle"
       />
     </div>
-    <Chart :style="chartContainerStyle" :option="chartOption" />
+    <div :style="cardSty"
+      ><Chart :style="chartContainerStyle" :option="chartOption"
+    /></div>
   </a-card>
 </template>
 
@@ -108,8 +110,8 @@
           x: [] as string[],
           y: [] as number[],
         };
-        new Array(10).fill(0).forEach((_item, index) => {
-          result.x.push(`${index + 1}月`);
+        new Array(12).fill(0).forEach((_item, index) => {
+          result.x.push(`${index + 1}门店`);
           result.y.push(Math.floor(Math.random() * 2001) + 1000);
         });
         return result;
@@ -133,28 +135,33 @@
       setLoading(false);
     }
   };
-  const cardSty = ref({
-    marginBottom: '15px',
+  const cardSty: any = ref({
     height: 'auto',
-    paddingTop: 0,
   });
-  const chartContainerStyle = ref({
+  const chartContainerStyle: any = ref({
     height: '220px',
-    width: '100%',
     transform: 'rotate(0deg)',
   });
 
   const updateChartContainerStyle = () => {
-    chartContainerStyle.value = {
-      height: '230px',
-      width: '400px',
-      transform: 'rotate(90deg)', // Rotate 90 degrees
-    };
-    cardSty.value = {
-      height: '500px',
-      marginBottom: '15px',
-      paddingTop: '50px',
-    };
+    if (chartContainerStyle.value.height === '220px') {
+      chartContainerStyle.value = {
+        height: '230px',
+        transform: 'rotate(90deg)', // Rotate 90 degrees
+      };
+      cardSty.value = {
+        height: '481px',
+        paddingTop: '80px',
+      };
+    } else {
+      chartContainerStyle.value = {
+        height: '220px',
+        transform: 'rotate(0deg)',
+      };
+      cardSty.value = {
+        height: 'auto',
+      };
+    }
   };
   onMounted(() => {
     fetchData();

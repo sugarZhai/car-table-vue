@@ -257,13 +257,13 @@
       return {
         name,
         count: Math.floor(Math.random() * 2) + 20,
-        value: new Array(8)
+        value: new Array(7)
           .fill(0)
           .map(() => Math.floor(Math.random() * 3201) + 800),
       };
     };
-    const xAxisNew = new Array(8).fill(0).map((_item, index) => {
-      return `${index}月`;
+    const xAxisNew = new Array(7).fill(0).map((_item, index) => {
+      return `${index}门店`;
     });
     try {
       const data = {
