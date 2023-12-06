@@ -84,7 +84,7 @@
           data: textChartsData.value,
           stack: 'one',
           type: 'bar',
-          barWidth: 16,
+          barWidth: 10,
           color: isDark ? '#4A7FF7' : '#246EFF',
         },
         {
