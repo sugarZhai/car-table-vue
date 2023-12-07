@@ -9,7 +9,7 @@
             animation
             show-group-separator
           />
-          <div class="desc">
+          <!-- <div class="desc">
             <a-typography-text type="secondary" class="label">
               {{ '较上月' }}
             </a-typography-text>
@@ -17,7 +17,7 @@
               {{ renderData.growth }}
               <icon-arrow-rise />
             </a-typography-text>
-          </div>
+          </div> -->
           <Chart v-if="!loading" :option="chartOption" style="height: 50px" />
         </div>
       </div>

@@ -5,9 +5,9 @@
       :header-style="{ paddingBottom: '0' }"
       :body-style="{ padding: '17px 20px 21px 20px' }"
     >
-      <!-- <template #title>
+      <template #title>
         {{ $t('workplace.popularContent') }}
-      </template> -->
+      </template>
       <a-space direction="vertical" :size="10" fill>
         <a-table
           :data="renderList"

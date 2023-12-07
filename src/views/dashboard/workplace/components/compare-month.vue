@@ -4,7 +4,7 @@
     <a-row :gutter="10">
       <a-col :span="12"
         ><ChainItem
-          :title="'产值'"
+          :title="'单车占比'"
           quota="visitors"
           chart-type="line"
           :card-style="{
@@ -13,7 +13,7 @@
       /></a-col>
       <a-col :span="12">
         <ChainItem
-          :title="'出库'"
+          :title="'固定单产'"
           quota="published"
           chart-type="bar"
           :card-style="{

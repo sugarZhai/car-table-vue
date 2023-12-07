@@ -97,6 +97,19 @@
             borderRadius: 2,
           },
         },
+        // {
+        //   name: '出库占比达成率',
+        //   type: 'line',
+        //   data: imgChartsData.value, // Replace with the actual data for the line
+        //   lineStyle: {
+        //     color: '#DAA520', // Adjust the color as needed
+        //     width: 2,
+        //   },
+        //   itemStyle: {
+        //     color: '#DAA520', // Adjust the color as needed
+        //     borderColor: '#DAA520', // Adjust the color as needed
+        //   },
+        // },
       ],
     };
   });
@@ -124,7 +137,7 @@
       chartData.forEach((el: any) => {
         if (el.name === '出库占比') {
           textChartsData.value = el.y;
-        } else if (el.name === '图文类') {
+        } else if (el.name === '出库占比目标') {
           imgChartsData.value = el.y;
         }
         videoChartsData.value = el.y;

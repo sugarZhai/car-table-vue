@@ -1,30 +1,19 @@
+<!-- eslint-disable vue/attributes-order -->
 <template>
   <a-spin :loading="loading" style="width: 100%">
     <a-card class="general-card">
       <div class="cus-title">
         <div>汽车用品KPI总览</div>
         <a-month-picker
-          style="width: 150px"
+          style="width: 160px"
           class="cus-month"
+          @change="handleSubmit"
           :default-value="`${currentDate.getFullYear()}-${
             currentMonth < 10 ? '0' : ''
           }${currentMonth}`"
         />
       </div>
-      <!-- <a-row justify="space-between" style="padding: 20px 0">
-        <a-col :xs="24" :sm="12">
-          <a-typography-text style="font-size: 16px"
-            ><b>汽车用品KPI总览</b></a-typography-text
-          >
-        </a-col>
-        <a-col :xs="24" :sm="12">
-          <a-month-picker
-            :default-value="`${currentDate.getFullYear()}-${
-              currentMonth < 10 ? '0' : ''
-            }${currentMonth}`"
-          />
-        </a-col>
-      </a-row> -->
+      <a-divider></a-divider>
       <a-row justify="space-between" style="width: 90%">
         <a-col v-for="(item, idx) in renderData" :key="idx" :span="2">
           <a-statistic
@@ -54,7 +43,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref, reactive } from 'vue';
+  import { computed, ref } from 'vue';
   import { useI18n } from 'vue-i18n';
   import { LineSeriesOption } from 'echarts';
   import useLoading from '@/hooks/loading';
@@ -64,15 +53,8 @@
 
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth() + 1; // Note: Months are zero-based
-  const form = reactive({
-    month: `${currentDate.getFullYear()}-${
-      currentMonth < 10 ? '0' : ''
-    }${currentMonth}`,
-    name: '',
-    city: '',
-  });
   const handleSubmit = (data: any) => {
-    console.log(data);
+    console.log('选中了几月份====', data);
   };
   const tooltipItemsHtmlString = (items: ToolTipFormatterParams[]) => {
     return items
@@ -273,12 +255,12 @@
         ),
         generateSeries('成本', '#F77234', '#FFE4BA', contentClickData.value),
         generateSeries(
-          '毛利率',
+          '出库达成率',
           '#34D1C9',
           '#E8FFFB',
           contentExposureData.value
         ),
-        // generateSeries('毛利率', '#3469FF', '#E8F3FF', activeUsersData.value),
+        generateSeries('毛利率', '#3469FF', '#E8F3FF', activeUsersData.value),
       ],
     };
   });
@@ -300,20 +282,20 @@
       const data = {
         xAxis: xAxisNew,
         data: [
-          generateLineData('单车占比'),
-          generateLineData('出库占比'),
-          generateLineData('基础商品占比'),
+          generateLineData('产值'),
+          generateLineData('出库达成率'),
+          generateLineData('成本'),
           generateLineData('毛利率'),
         ],
       };
       // const { data } = await queryDataOverview();
       xAxis.value = data.xAxis;
       data.data.forEach((el) => {
-        if (el.name === '单车占比') {
+        if (el.name === '产值') {
           contentProductionData.value = el.value;
-        } else if (el.name === '出库占比') {
+        } else if (el.name === '毛利率') {
           contentClickData.value = el.value;
-        } else if (el.name === '基础商品占比') {
+        } else if (el.name === '成本') {
           contentExposureData.value = el.value;
         }
         activeUsersData.value = el.value;
@@ -359,10 +341,9 @@
   .cus-title {
     display: flex;
     justify-content: space-between;
-    padding: 20px 0;
+    padding: 15px 0 0 0;
     align-items: center;
-    border-bottom: 1px solid #f1f1f1;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     > div {
       font-size: 16px;
       font-weight: bolder;

@@ -3,7 +3,7 @@
     <dataView />
     <LineItem />
     <a-card class="custom-crad">
-      <a-card-meta title="品牌毛利">
+      <a-card-meta title="新车销量">
         <template #description>
           <CategoriesPercent />
         </template>
