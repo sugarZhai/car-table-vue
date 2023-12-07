@@ -5,52 +5,9 @@
       :header-style="{ paddingBottom: '0' }"
       :body-style="{ padding: '17px 20px 21px 20px' }"
     >
-      <template #title>
+      <!-- <template #title>
         {{ $t('workplace.popularContent') }}
-      </template>
-      <a-space direction="vertical" :size="10" fill>
-        <a-form :model="form" @submit="handleSubmit">
-          <a-row>
-            <a-col :xs="24" :sm="12">
-              <a-form-item field="name" label="名称">
-                <a-input v-model="form.name" placeholder="请输入名称" />
-              </a-form-item>
-            </a-col>
-            <a-col :xs="24" :sm="12">
-              <a-form-item field="city" label="城市">
-                <a-select defaultValue="北京" placeholder="Please select ...">
-                  <a-option>北京</a-option>
-                  <a-option>上海</a-option>
-                  <a-option>大连</a-option>
-                  <a-option>杭州</a-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-          </a-row>
-          <a-row>
-            <a-col :xs="24" :sm="12">
-              <a-form-item field="month" label="月份">
-                <a-month-picker
-                  :default-value="`${currentDate.getFullYear()}-${
-                    currentMonth < 10 ? '0' : ''
-                  }${currentMonth}`"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :xs="24" :sm="12">
-              <a-form-item>
-                <a-button
-                  html-type="submit"
-                  type="primary"
-                  style="margin-right: 20px"
-                  >查询</a-button
-                >
-                <a-button html-type="submit">重置</a-button>
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </a-form>
-      </a-space>
+      </template> -->
       <a-space direction="vertical" :size="10" fill>
         <a-table
           :data="renderList"
@@ -73,24 +30,12 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref, h, compile, reactive } from 'vue';
+  import { computed, ref, h, compile } from 'vue';
   import useLoading from '@/hooks/loading';
   // import { queryPopularList } from '@/api/dashboard';
 
   const { loading, setLoading } = useLoading();
   const renderList = ref<any>();
-  const currentDate = new Date();
-  const currentMonth = currentDate.getMonth() + 1; // Note: Months are zero-based
-  const form = reactive({
-    month: `${currentDate.getFullYear()}-${
-      currentMonth < 10 ? '0' : ''
-    }${currentMonth}`,
-    name: '',
-    city: '',
-  });
-  const handleSubmit = (data: any) => {
-    console.log(data);
-  };
   const columns: any = computed(() => {
     return [
       {

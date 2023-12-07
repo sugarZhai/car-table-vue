@@ -36,7 +36,6 @@
     background-color: var(--color-fill-2);
     padding: 16px 20px;
     padding-bottom: 0;
-    // display: flex;
   }
 
   .left-side {

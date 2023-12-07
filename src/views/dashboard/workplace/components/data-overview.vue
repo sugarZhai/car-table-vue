@@ -1,6 +1,30 @@
 <template>
   <a-spin :loading="loading" style="width: 100%">
-    <a-card class="general-card" :title="'KPI总览'">
+    <a-card class="general-card">
+      <div class="cus-title">
+        <div>汽车用品KPI总览</div>
+        <a-month-picker
+          style="width: 150px"
+          class="cus-month"
+          :default-value="`${currentDate.getFullYear()}-${
+            currentMonth < 10 ? '0' : ''
+          }${currentMonth}`"
+        />
+      </div>
+      <!-- <a-row justify="space-between" style="padding: 20px 0">
+        <a-col :xs="24" :sm="12">
+          <a-typography-text style="font-size: 16px"
+            ><b>汽车用品KPI总览</b></a-typography-text
+          >
+        </a-col>
+        <a-col :xs="24" :sm="12">
+          <a-month-picker
+            :default-value="`${currentDate.getFullYear()}-${
+              currentMonth < 10 ? '0' : ''
+            }${currentMonth}`"
+          />
+        </a-col>
+      </a-row> -->
       <a-row justify="space-between" style="width: 90%">
         <a-col v-for="(item, idx) in renderData" :key="idx" :span="2">
           <a-statistic
@@ -30,7 +54,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref } from 'vue';
+  import { computed, ref, reactive } from 'vue';
   import { useI18n } from 'vue-i18n';
   import { LineSeriesOption } from 'echarts';
   import useLoading from '@/hooks/loading';
@@ -38,6 +62,18 @@
   import useThemes from '@/hooks/themes';
   import useChartOption from '@/hooks/chart-option';
 
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1; // Note: Months are zero-based
+  const form = reactive({
+    month: `${currentDate.getFullYear()}-${
+      currentMonth < 10 ? '0' : ''
+    }${currentMonth}`,
+    name: '',
+    city: '',
+  });
+  const handleSubmit = (data: any) => {
+    console.log(data);
+  };
   const tooltipItemsHtmlString = (items: ToolTipFormatterParams[]) => {
     return items
       .map(
@@ -230,24 +266,19 @@
       },
       series: [
         generateSeries(
-          '单车占比',
+          '产值',
           '#722ED1',
           '#F5E8FF',
           contentProductionData.value
         ),
+        generateSeries('成本', '#F77234', '#FFE4BA', contentClickData.value),
         generateSeries(
-          '出库占比',
-          '#F77234',
-          '#FFE4BA',
-          contentClickData.value
-        ),
-        generateSeries(
-          '基础商品占比',
+          '毛利率',
           '#34D1C9',
           '#E8FFFB',
           contentExposureData.value
         ),
-        generateSeries('毛利率', '#3469FF', '#E8F3FF', activeUsersData.value),
+        // generateSeries('毛利率', '#3469FF', '#E8F3FF', activeUsersData.value),
       ],
     };
   });
@@ -324,5 +355,17 @@
     text-align: center;
     vertical-align: middle;
     border-radius: 6px;
+  }
+  .cus-title {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 0;
+    align-items: center;
+    border-bottom: 1px solid #f1f1f1;
+    margin-bottom: 10px;
+    > div {
+      font-size: 16px;
+      font-weight: bolder;
+    }
   }
 </style>
